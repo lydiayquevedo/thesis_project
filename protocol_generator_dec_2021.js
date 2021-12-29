@@ -137,7 +137,7 @@ function generateProtocol(child, pastSessions) {
                 "left": 30,
                 "width": 40
             }],
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "autoProceed": true,
             "durationSeconds": 10,
             "doRecording": false,
@@ -159,7 +159,7 @@ function generateProtocol(child, pastSessions) {
                 
                 }],
             "text": "Story 1 of 4",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "autoProceed": false,
             "showPreviousButton": false,
             "parentTextBlock": {
@@ -178,7 +178,7 @@ function generateProtocol(child, pastSessions) {
                 
                 }],
             "text": "Story 2 of 4",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "autoProceed": false,
             "showPreviousButton": false,
             "parentTextBlock": {
@@ -197,7 +197,7 @@ function generateProtocol(child, pastSessions) {
                 
                 }],
             "text": "Story 3 of 4",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "autoProceed": false,
             "showPreviousButton": false,
             "parentTextBlock": {
@@ -216,7 +216,7 @@ function generateProtocol(child, pastSessions) {
                 
                 }],
             "text": "Story 4 of 4",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "autoProceed": false,
             "showPreviousButton": false,
             "parentTextBlock": {
@@ -226,7 +226,7 @@ function generateProtocol(child, pastSessions) {
         },
         "start-recording": {
             "kind": "exp-lookit-start-recording",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "videoTypes": [
                 "webm",
                 "mp4"
@@ -238,12 +238,12 @@ function generateProtocol(child, pastSessions) {
         },
         "exit-survey": {
             "kind": "exp-lookit-exit-survey",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "debriefing": {
                 "title": "Thank you!",
                 "text": "Our study is interested in how children answer questions that use wh-words like ‘who,’ ‘what,’ ‘where,’ ‘when,’ ‘why,’ and ‘how.’ You may already know that wh-words can have a different position in the sentence depending on the language you speak (e.g. at the beginning of a question in English vs. in the middle of a sentence in Mandarin). Though these languages seem different, some scientists think that they are using the same structures below the surface. It’s hard to test these theories, though! How can we get a look at the grammatical structure someone is using in their head? One way is to study how children learn grammar. \n \n Scientists think children are born with knowledge about how languages work, or that this knowledge is encoded in our brains somehow at birth. This would explain how children can learn a language so easily. If we can find out what children know about languages, then we might be able to learn more about the basic structures that organize all human languages! The idea that languages share some common structure is called Universal Grammar, and  <a href='https://www.ted.com/talks/cameron_morin_what_do_all_languages_have_in_common#t-17176' rel='noopener' target='_blank'> this TED talk </a> is a great place to learn more about how this idea has influenced our research today. Here's <a 'https://www.ted.com/talks/patricia_kuhl_the_linguistic_genius_of_babies?language=en' rel='nonopener' target='_blank'> another great talk </a> about how this theory relates to babies. \n \n Hopefully, learning more about how negative words like ‘n’t’ and ‘not’ affect these types of questions will tell us more about the knowledge children are using to learn English. There are already some <a href='https://scholarworks.umass.edu/dissertations/AAI3012107' rel='noopener' target='_blank'> complicated theories </a> out there that we're hoping to expand upon. We believe that children use some combination of syntactic (i.e. grammatical) and semantic (i.e. meaning-based) rules to figure out how to answer a question like the ones in our study. \n \n Please don't worry about how your child answered during the experiment. It's completely normal for children to struggle with these questions and answer them differently from how you would! Even as a grown-up, questions like 'Who didn't she ask to clean?' are confusing! In the end, we're learning about the possibilities of human grammar from your child--not testing them--so we're serious when we say there are no wrong answers! \n \n Thank you again for being a part of our study. If you’re interested in learning more about this experiment, please feel free to reach out to X",
                 "image": {
-                    "src": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/img/button_fingerpaint.jpg",
+                    "src": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
                     "top": 5,
                     "left": 30,
                     "width": 40,
@@ -305,7 +305,7 @@ function generateProtocol(child, pastSessions) {
                     "displayDelayMs": 48000
                 }
             ],
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audioTypes": [
                 "mp3",
                 "ogg"
@@ -392,7 +392,7 @@ function generateProtocol(child, pastSessions) {
                     "width": 20
                 }
             ],
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audioTypes": [
                 "mp3",
                 "ogg"
@@ -540,7 +540,7 @@ function generateProtocol(child, pastSessions) {
                     "audio": "assent5"
                 }
             ],
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "videoTypes": [
                 "webm",
                 "mp4"
@@ -1252,7 +1252,7 @@ function generateProtocol(child, pastSessions) {
 
         expositionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": storyAudio,
             "images": [{
                 "id": "storyIllustration",
@@ -1271,7 +1271,7 @@ function generateProtocol(child, pastSessions) {
 
         questionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": questionAudio,
             "images": [{
                     "id": "storyIllustration",
@@ -1368,7 +1368,7 @@ function generateProtocol(child, pastSessions) {
 
         expositionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": storyAudio,
             "images": [{
                 "id": "storyIllustration",
@@ -1387,7 +1387,7 @@ function generateProtocol(child, pastSessions) {
 
         questionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": questionAudio,
             "images": [{
                     "id": "storyIllustration",
@@ -1484,7 +1484,7 @@ function generateProtocol(child, pastSessions) {
 
         expositionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": storyAudio,
             "images": [{
                 "id": "storyIllustration",
@@ -1503,7 +1503,7 @@ function generateProtocol(child, pastSessions) {
 
         questionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": questionAudio,
             "images": [{
                     "id": "storyIllustration",
@@ -1600,7 +1600,7 @@ function generateProtocol(child, pastSessions) {
 
         expositionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": storyAudio,
             "images": [{
                 "id": "storyIllustration",
@@ -1619,7 +1619,7 @@ function generateProtocol(child, pastSessions) {
 
         questionTrial = {
             "kind": "exp-lookit-images-audio",
-            "baseDir": "https://raw.githubusercontent.com/smileyblue77/art_class_storytime/master/",
+            "baseDir": "https://raw.githubusercontent.com/lydiayquevedo/thesis_project/master/",
             "audio": questionAudio,
             "images": [{
                     "id": "storyIllustration",
