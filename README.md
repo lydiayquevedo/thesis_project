@@ -1,7 +1,7 @@
 # art_class_storytime
-Welcome to my repository for my undergraduate thesis project! This study examines how children learn to answer questions containing 'who' and 'how' in the context of negation ('n't' and 'not') as well as in the context of communication verbs with differing control properties ('ask' and 'promise').
+Welcome to my repository for my undergraduate thesis project! This study examines how children learn to answer questions containing 'who' and 'how' in the context of negation ('n't' and 'not') as well as in the context of communication verbs with differing control properties ('ask' and 'promise'). Here, you can find the original assets for the project (audio and video) and the Lookit protocol generator. Soon, these files will be joined by the dataset, data wrangling scripts in PowerQuery and R, and an RMarkdown document with the code used for statistical analysis.  
 
-Originally, the study was launched on [Lookit.com](https://lookit.mit.edu/), an experimental platform designed by MIT's Early Childhood Cognition Lab. Currently, the study is collecting data from adult participants.
+Originally, the study was launched on [Lookit.com](https://lookit.mit.edu/), an experimental platform designed by MIT's Early Childhood Cognition Lab.
 
 ---
 
