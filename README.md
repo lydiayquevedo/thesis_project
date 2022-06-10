@@ -12,8 +12,8 @@ For reference, the procedure was approximately as follows:
 5. Run statistical analysis in RStudio
 6. Complete written thesis and defense with findings
 
----
----
+
+
 
 ## File & Folder Overview
 
