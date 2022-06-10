@@ -10,10 +10,10 @@ For reference, the procedure was approximately as follows:
 3. Collect data from child and adult participants
 4. Download, compile, and clean CSV data files
 5. Run statistical analysis in RStudio
-6. Complete written thesis and defense with findings
-
-
-
+6. Complete written thesis and defense with findings  
+  
+    
+    
 
 ## File & Folder Overview
 
