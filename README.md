@@ -25,11 +25,11 @@ All original images used in the study for the stories and buttons.
 
 #### mp3
 
-All original audio used in the study for the stories and questions, in MP3 format.
+All original audio stimuli, in MP3 format.
 
 #### oog
 
-All original audio used in the study for the stories and questions, in OOG format.
+All original audio stimuli, in OOG format.
 
 ---
 
@@ -49,9 +49,9 @@ The Markdown code for the description you're reading.
 
 #### data_cleaning_script.pq
 
-The PowerQuery script used in Excel to clean the data in preparation for easier reading and therefore easier coding (identifying which raw responses correspond to which category). For analysis, the data was downloaded from Lookit as a zipped folder of CSV files recording Lookit frame responses by participant.
+The Excel PowerQuery script for data cleaning in preparation for easier reading and therefore easier coding (identifying which raw responses correspond to which category). For analysis, the data was downloaded from Lookit as a zipped folder of CSV files recording Lookit frame responses by participant.
 
 #### protocol_generator_dec_2021.js
 
-The code used to generate the Lookit protocol for the study, including the randomization script for the JSON frames.
+The code to generate the study's Lookit protocol, including the randomization script for the JSON frames.
 
