@@ -8,8 +8,8 @@ For reference, the procedure was approximately as follows:
 1. Experiment design and stimuli creation
 2. Coding the Lookit protocol generator in JSON and JavaScript
 3. Collect data from child and adult participants
-4. Download, compile, and clean CSV data files
-5. Run statistical analysis in RStudio
+4. Download, compile, and clean CSV data files using Excel PowerQuery
+5. Import data and run statistical analysis in RStudio
 6. Complete written thesis and defense with findings  
   
     
@@ -46,11 +46,19 @@ The Markdown code for the description you're reading.
 ---
 
 ### Analysis
+There were two Excel sheets in the same workbook that were used to clean and consolidate the data. As a source folder for PowerQuery, we used the zipped folder of CSV files downloaded from Lookit. 
 
-#### data_cleaning_script.pq
+#### data_cleaning_frameChoices_NEW.pq
 
-The Excel PowerQuery script for data cleaning in preparation for easier reading and therefore easier coding (identifying which raw responses correspond to which category). For analysis, the data was downloaded from Lookit as a zipped folder of CSV files recording Lookit frame responses by participant.
+This script set up the `frameChoices` sheet compiled the code of all possible responses or buttons that participants could use. 
 
+#### data_cleaning_selectedImages_NEW.pq
+
+This script set up the `selectedImages` sheet to compile all choices made by participants during the study.
+
+---
+
+### Lookit
 #### protocol_generator_dec_2021.js
 
 The code to generate the study's Lookit protocol, including the randomization script for the JSON frames.
