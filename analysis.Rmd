@@ -1,0 +1,558 @@
+---
+title: "second_analysis_june_2022"
+author: "Lydia Quevedo"
+date: '2022-06-10'
+output:
+  word_document: default
+  html_document: default
+---
+# Introduction
+
+This RMarkdown document and these scripts are the product of a long learning process and a great deal of help from many sources. There are certainly bound to be mistakes and redundancy. Any and all suggestions for improvement are appreciated!
+
+## Background
+The PowerQuery script used in Excel to clean the data in preparation for easier reading and therefore easier coding (identifying which raw responses correspond to which category). For analysis, the data was downloaded from Lookit as a zipped folder of CSV files recording Lookit frame responses by participant.
+
+
+We began with the original CSV files downloaded from Lookit recording frame responses by participant. To clean the data and prepare for easier coding, we used PowerQuery scripts in Excel. Next, we transferred responses to a new table combining relevant participant information on age, language, etc. The raw data was then coded according to a 1-4 system as follows:
+
+* 1 = short distance (SD) target answer
+* 2 = long distance (LD) target answer
+* 3 = SD foil
+* 4 = SD foil
+
+To correctly provide an answer of type 1 and 2, participants needed to correctly parse the negation in the question in relation to the information from the story. A response of type 3 or 4 would indicate a failure to do so. For a full explanation, 
+
+
+
+
+## Setup
+
+Firstly, let's establish the libraries we'll be using for this analysis.
+
+```{r setup, message=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(rstatix)
+```
+
+Next, we're going to call the data and reorganize it for RStudio.
+
+```{r call the data, message = FALSE}
+mydata <- read_excel("FILEPATH/coded_data_NEW_adults.xlsx", sheet = "CodedResponses")
+
+mydataLR <- mydata %>%
+  select(child__hashed_id:P2_ARG_2_B)%>%
+  pivot_longer(
+    cols = A1_ADJ_0_A:P2_ARG_2_B,
+    names_to = c("verb", "wh_type", "neg_type", "tense"),
+    names_sep = "_",
+    values_to = "value",
+    values_drop_na = FALSE) %>%
+  mutate(row = row_number())
+```
+
+```{r collapse and rename}
+mydataLR$verb[mydataLR$verb =="A1"] <- "ask"
+mydataLR$verb[mydataLR$verb == "A2"]<- "ask"
+mydataLR$verb[mydataLR$verb == "P1"]<- "promise"
+mydataLR$verb[mydataLR$verb == "P2"]<- "promise"
+
+mydataLR$neg_type[mydataLR$neg_type =="0"] <- "0"
+mydataLR$neg_type[mydataLR$neg_type =="1"] <- "1"
+mydataLR$neg_type[mydataLR$neg_type =="2"] <- "2"
+
+mydataLR$tense[mydataLR$tense =="A"] <- "[-tense]"
+mydataLR$tense[mydataLR$tense =="B"] <- "[+tense]"
+
+mydataLR <- mydataLR %>%
+  filter(is.na(value) == F)
+```
+
+```{r convert IV to factors, include = FALSE}
+mydataLR$age_group = factor(mydataLR$age_group)
+mydataLR$verb = factor(mydataLR$verb)
+mydataLR$wh_type = factor(mydataLR$wh_type)
+mydataLR$neg_type = factor(mydataLR$neg_type)
+mydataLR$tense = factor(mydataLR$tense)
+```
+
+
+Filter out separate adult and child groups
+```{r}
+mydataLR_adult <- mydataLR %>%
+  filter(group == "adult")
+mydataLR_child <- mydataLR %>%
+  filter(group == "child")
+```
+
+# The analysis
+Firstly, we're going to examine the probability that adults choose the long-distance target answer over all other answers. This first chunk of code quickly recodes the data for this analysis.
+## LD targets ADULT
+```{r code LD target as 1 and other as 0 for adult}
+LDtarget_adult <- mydataLR_adult
+
+LDtarget_adult$value[LDtarget_adult$value == "1"] <- "0"
+LDtarget_adult$value[LDtarget_adult$value == "3"] <- "0"
+LDtarget_adult$value[LDtarget_adult$value == "4"] <- "0"
+LDtarget_adult$value[LDtarget_adult$value == "2"] <- "1"
+
+LDtarget_adult_noerr <- mydataLR_adult %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+
+LDtarget_adult$value = as.factor(LDtarget_adult$value)
+```
+In this next chunk, we actually run the binomial regression analysis and print the results.
+```{r run model on LD target for adult}
+modelLDt_adult <- glm(value ~ verb + wh_type + neg_type + tense+ verb*wh_type + verb*neg_type + tense*verb+ +tense*verb*wh_type+wh_type*neg_type + wh_type*neg_type*verb, data = LDtarget_adult, family = binomial)
+summary(modelLDt_adult)
+```
+
+
+## SD targets ADULT
+Next, we're interested in what adults think of short distance target answers compared to all others. As before, we briefly recode the data.
+```{r code SD target as 1 and other as 0 for adult}
+SDtarget_adult = mydataLR_adult
+
+SDtarget_adult$value[SDtarget_adult$value == "2"] <- "0"
+SDtarget_adult$value[SDtarget_adult$value == "3"] <- "0"
+SDtarget_adult$value[SDtarget_adult$value == "4"] <- "0"
+SDtarget_adult$value[SDtarget_adult$value == "1"] <- "1"
+```
+Once again, we run the model and print the results.
+```{r run model on SD target for adult}
+SDtarget_adult$value = factor(SDtarget_adult$value)
+SDtarget_adult$tense = factor(SDtarget_adult$tense)
+
+modelSDt_adult <- glm(value ~ verb + wh_type + neg_type + tense + verb*wh_type + verb*neg_type + wh_type*neg_type + wh_type*neg_type*verb, data = SDtarget_adult, family = binomial)
+summary(modelSDt_adult)
+```
+
+
+## LD foils
+It's important to not overlook any effects of the foil answers. We repeat the same structure above with the long distance foil, or the answer with the incorrect polarity.
+```{r code LD foil as 1 and other as 0}
+LDfoil = mydataLR
+
+LDfoil$value[LDfoil$value == "1"] <- "0"
+LDfoil$value[LDfoil$value == "2"] <- "0"
+LDfoil$value[LDfoil$value == "3"] <- "0"
+LDfoil$value[LDfoil$value == "4"] <- "1"
+```
+
+```{r run model on LD foil}
+LDfoil$value = factor(LDfoil$value)
+
+modelLDf <- glm(value ~ verb + wh_type + neg_type + tense + verb*wh_type + verb*neg_type + wh_type*neg_type + wh_type*neg_type*verb, data = LDfoil, family = binomial)
+summary(modelLDf)
+```
+
+## SD foils
+Lastly, we examine effects of the final type of answer: short distance target.
+```{r code SD foil as 1 and other as 0}
+SDfoil = mydataLR
+
+SDfoil$value[SDfoil$value == "1"] <- "0"
+SDfoil$value[SDfoil$value == "2"] <- "0"
+SDfoil$value[SDfoil$value == "3"] <- "0"
+SDfoil$value[SDfoil$value == "4"] <- "1"
+```
+
+```{r run model on SD foil}
+SDfoil$value = factor(SDfoil$value)
+
+modelSDf <- glm(value ~ verb + wh_type + neg_type + tense + verb*wh_type + verb*neg_type + wh_type*neg_type + wh_type*neg_type*verb, data = SDfoil, family = binomial)
+summary(modelSDf)
+```
+
+## LD adult versus child by verb, wh, neg, tense
+Now that we have examined adults independently to establish a baseline, we must examine whether age group (adult or child) has any significant effects on how participants respond. Here, we recode the data and run the model.
+Recode
+```{r}
+LDtarget_compare1 <- mydataLR %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+LDtarget_compare1$value = factor(LDtarget_compare1$value)
+```
+
+Running the model
+```{r}
+modelLDt_compare1 <- glm(value ~ group + verb + wh_type + neg_type + tense + group*verb*wh_type + group*verb*tense + group*wh_type*neg_type + group*verb*wh_type*neg_type, data = LDtarget_compare1, family = binomial)
+summary(modelLDt_compare1)
+```
+
+
+
+## LD adult versus child by verb, wh, neg
+After the above analysis, we chose to discard tense as a factor. We eliminated the variable and ran the above code again.
+
+Recode
+```{r}
+LDtarget_compare <- mydataLR %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+LDtarget_compare$value = factor(LDtarget_compare$value)
+```
+
+Running the model
+```{r}
+modelLDt_compare <- glm(value ~ group + verb + wh_type + neg_type +group*verb*wh_type + group*wh_type*neg_type, data = LDtarget_compare, family = binomial)
+summary(modelLDt_compare)
+```
+
+
+
+## Just ask, LD adult versus child
+We then became interested in significant effects within each verb. We began with 'ask' as it has more neutral semantic properties.
+
+Recode
+```{r}
+LDtarget_compare_ask <- mydataLR %>%
+  filter(verb == "ask") %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+LDtarget_compare_ask$value = factor(LDtarget_compare_ask$value)
+```
+
+Running the model
+```{r}
+modelLDt_compare_ask <- glm(value ~ group + wh_type + neg_type  + group*wh_type*neg_type, data = LDtarget_compare_ask, family = binomial)
+summary(modelLDt_compare_ask)
+```
+
+
+### No age group
+Here, we examine effects of age group within the child data. Error responses have been discarded.
+Running the model
+```{r}
+modelLDt_child_noerr1 <- glm(value ~ age_group + verb + wh_type + neg_type + tense + verb*wh_type + verb*neg_type +wh_type*neg_type + wh_type*neg_type*verb, data = LDtarget_child_noerr, family = binomial)
+summary(modelLDt_child_noerr1)
+```
+
+
+
+### All-in with IV
+Same as above, except with minor changes.
+
+Running the model
+```{r}
+modelLDt_child_noerr <- glm(value ~ age_group +verb + wh_type + neg_type + age_group + verb*wh_type + verb*neg_type + wh_type*neg_type + age_group*verb + age_group*wh_type*neg_type + wh_type*neg_type*verb, data = LDtarget_child_noerr, family = binomial)
+summary(modelLDt_child_noerr)
+```
+
+
+## LD targets ADULT (no error responses included)
+
+Recode
+```{r}
+LDtarget_adult_noerr <- mydataLR_adult %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+LDtarget_adult_noerr$value = factor(LDtarget_adult_noerr$value)
+```
+
+Running the model
+```{r}
+modelLDt_adult_noerr <- glm(value ~ verb + wh_type + neg_type +wh_type*neg_type + wh_type*neg_type*verb, data = LDtarget_adult_noerr, family = binomial)
+summary(modelLDt_adult_noerr)
+```
+
+
+
+
+## ERROR adults versus children
+We must also consider whether there were any significant effects on the error responses. That is, were participants more likely to make mistakes in certain circumstances? 
+
+Recode
+```{r}
+error_compare <- mydataLR %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 0,
+                           value == 3 ~ 1,
+                           value == 4 ~ 1)) %>%
+  filter(is.na(value) == F)
+
+error_compare$value = factor(error_compare$value)
+```
+
+Running the model
+```{r}
+modelerror_compare <- glm(value ~ group + verb + wh_type + neg_type + tense + group*verb*wh_type + group*verb*tense + group*wh_type*neg_type + group*verb*wh_type*neg_type, data = error_compare, family = binomial)
+summary(modelerror_compare)
+```
+
+
+
+
+## Looking at language
+Given the number of bilingual participants, we of course had to examine whether there was an effect of language.
+```{r}
+child_by_lang  <- glm(value ~ child_lang + wh_type + neg_type  + child_lang*verb+ child_lang*wh_type*neg_type, data = LDtarget_child_noerr, family = binomial)
+summary(child_by_lang)
+```
+
+```{r}
+adults_by_lang  <- glm(value ~ child_lang + wh_type + neg_type  + child_lang*verb + child_lang*wh_type*neg_type, data = LDtarget_adult_noerr, family = binomial)
+summary(adults_by_lang)
+```
+
+
+# Visualizations and summary statistics
+Last but not least, we produced a set of visualizations and summary statistics that were used in the thesis project.
+
+Step 1: clean data
+```{r}
+mydatasum <- mydata %>%
+  select(child__hashed_id,age_group,group:P2_ARG_2_B)%>%
+  pivot_longer(
+    cols = A1_ADJ_0_A:P2_ARG_2_B,
+    names_to = c("verb", "wh_type", "neg_type", "tense"),
+    names_sep = "_",
+    values_to = "value",
+    values_drop_na = FALSE) %>%
+  group_by(age_group, child__hashed_id, verb, wh_type, neg_type, tense) %>%
+  arrange(.by_group = TRUE) %>%
+  mutate(row = row_number()) 
+
+mydatasum$stimulus <- paste(mydatasum$wh_type, mydatasum$neg_type, sep = "_")
+
+mydatasum$verb[mydatasum$verb =="A1"] <- "ask"
+mydatasum$verb[mydatasum$verb == "A2"]<- "ask"
+mydatasum$verb[mydatasum$verb == "P1"]<- "promise"
+mydatasum$verb[mydatasum$verb == "P2"]<- "promise"
+
+mydatasum$neg_type[mydatasum$neg_type =="0"] <- "0 affirmative"
+mydatasum$neg_type[mydatasum$neg_type =="1"] <- "1 clitic"
+mydatasum$neg_type[mydatasum$neg_type =="2"] <- "2 adverb"
+
+mydatasum$wh_type[mydatasum$wh_type =="ARG"] <- "who"
+mydatasum$wh_type[mydatasum$wh_type =="ADJ"] <- "how"
+
+mydatasum$tense[mydatasum$tense =="A"] <- "[-tense]"
+mydatasum$tense[mydatasum$tense =="B"] <- "[+tense]"
+
+mydatasum <- mydatasum %>%
+  filter(is.na(value) == F)
+```
+
+
+Step 2: Pull out adult responses
+```{r pull out adult}
+mydatasum_adult <- mydatasum %>%
+  filter(group == "adult")
+```
+
+
+Step 3: Filter down to LD as 1 and SD as 0
+```{r filter down to LD as 1 and SD as 0}
+mydatasum_adult_LD <- mydatasum_adult %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 1)) %>%
+  filter(is.na(value) == F)
+```
+
+Step 4: Filter out error as 1 and target as 0
+```{r filter to error as 1 and target as 0}
+mydatasum_adult_error <- mydatasum_adult %>%
+  mutate(value = case_when(value == 1 ~ 0,
+                           value == 2 ~ 0,
+                           value == 3 ~ 1,
+                           value == 4 ~ 1)) %>%
+  filter(is.na(value) == F)
+```
+
+
+## LD target as 1, SD target as 0 and other as blank for ADULT
+Summary statistics
+```{r message = FALSE}
+stats_adult <- mydatasum_adult_LD %>%
+  group_by(verb, wh_type, neg_type, stimulus) %>%
+  get_summary_stats(value, type = "mean_se")%>%
+  mutate(upper_ci_proportion = mean+1.96*se, lower_ci_proportion = mean-1.96*se)
+```
+
+```{r fig.width = 15}
+fig2 = ggplot(stats_adult, aes(x = wh_type, y = mean, fill = neg_type)) + 
+  geom_col(width = 0.9, position = position_dodge(0.9)) + 
+  theme(text = element_text(size = 25), axis.text.x = element_text(hjust = 1)) +
+  facet_wrap(~verb) +
+  labs(y = "Proportion", x = "Wh-word") +
+  geom_errorbar(position = position_dodge(0.9),aes(ymin = lower_ci_proportion, ymax = upper_ci_proportion), width = 0.2) +
+  coord_cartesian(ylim=c(0,1)) +
+  scale_fill_viridis_d(option = "D")
+fig2
+ggsave("figure2.jpg")
+```
+
+
+## Error for adults
+```{r}
+error_adult <- mydatasum_adult_error %>%
+  group_by(verb,  wh_type, neg_type, stimulus) %>%
+  get_summary_stats(value, type = "mean_se")%>%
+  mutate(upper_ci_proportion = mean+1.96*se, lower_ci_proportion = mean-1.96*se)
+```
+
+
+Average proportion error for adults
+```{r}
+avg_error_adult = mean(error_adult$mean)
+avg_error_adult
+```
+
+
+```{r fig.width = 15}
+fig8 = ggplot(error_adult, aes(x = wh_type, y = mean, fill = neg_type)) + 
+  geom_col(width = 0.9, position = "dodge") + 
+  theme(text = element_text(size = 25), axis.text.x = element_text(hjust = 1)) +
+  facet_wrap(~verb) +
+  labs(y = "Proportion", x = "Wh-word") +
+  geom_errorbar(position = position_dodge(0.9),aes(ymin = lower_ci_proportion, ymax = upper_ci_proportion), width = 0.2) +
+  coord_cartesian(ylim=c(0,1)) +
+  scale_fill_viridis_d(option = "D")
+fig8
+ggsave("figure8.jpg")
+```
+
+
+
+## Summary statistics
+Are adults doing LD movement across n't more than affirmatives? Are kids?
+
+### Affirmative answers
+
+Step 1: Pull all adult affirmative answers
+```{r}
+adult_aff <- mydatasum_adult_LD %>%
+  group_by(verb, wh_type, neg_type) %>%
+  filter(neg_type == "0 affirmative") %>%
+  select(verb, wh_type, neg_type, value)
+```
+
+Step 4: Group affirmatives by verb
+```{r}
+adult_aff_ask <- adult_aff %>%
+  filter(verb == "ask")
+
+adult_aff_promise <- adult_aff %>%
+  filter(verb == "promise")
+```
+
+Step 3: Calculate mean for ask
+```{r}
+adult_aff_ask_mean = mean(adult_aff_ask$value)
+adult_aff_ask_mean
+```
+
+Step 4: Calculate mean for promise
+```{r}
+adult_aff_promise_mean = mean(adult_aff_promise$value)
+adult_aff_promise_mean
+```
+
+Calculate SD ask
+```{r}
+(sum(adult_aff_ask$value)/length(adult_aff_ask$value))
+```
+Calculate SD promise
+```{r}
+(sum(adult_aff_promise$value)/length(adult_aff_promise$value))
+```
+
+### Clitic NEG answers
+
+Step 1: Pull out clitic answers
+```{r}
+adult_nt <- mydatasum_adult_LD %>%
+  group_by(verb, wh_type, neg_type) %>%
+  filter(neg_type == "1 clitic") %>%
+  select(verb, wh_type, neg_type, value)
+```
+
+Step 2: Group clitic by Verb
+```{r}
+adult_nt_ask <- adult_nt %>%
+  filter(verb == "ask")
+adult_nt_promise <- adult_nt %>%
+  filter(verb == "promise")
+```
+
+Step 3: Calculate mean for ask
+```{r}
+adult_nt_ask_mean = mean(adult_nt_ask$value)
+adult_nt_ask_mean
+```
+
+Step 4: Calcualte mean for promise
+```{r}
+adult_nt_promise_mean = mean(adult_nt_promise$value)
+```
+
+### Adverbial NEG answers
+We originally didn't do this because the point of interest is whether the clitic has any blocking effect at all compared to the affirmative. 
+
+
+But now...
+
+Step 1: Pull out clitic answers
+```{r}
+adult_not <- mydatasum_adult_LD %>%
+  group_by(verb, wh_type, neg_type) %>%
+  filter(neg_type == "2 adverb") %>%
+  select(verb, wh_type, neg_type, value)
+```
+
+Step 2: Group clitic by Verb
+```{r}
+adult_not_ask <- adult_not %>%
+  filter(verb == "ask")
+adult_not_promise <- adult_not %>%
+  filter(verb == "promise")
+```
+
+Step 3: Calculate mean for ask
+```{r}
+adult_not_ask_mean = mean(adult_not_ask$value)
+adult_not_ask_mean
+```
+
+Step 4: Calcualte mean for promise
+```{r}
+adult_not_promise_mean = mean(adult_not_promise$value)
+```
+
+## T tests
+
+### Differences with clitic negation
+Comparing the means of affirmative with 'ask' to means of clitic with ask
+```{r}
+t.test(adult_aff_ask$value, mu = adult_nt_ask_mean)
+```
+
+Comparing the means of affirmative 'promise' to means of clitic with 'promise
+```{r}
+t.test(adult_aff_promise$value, mu = adult_nt_promise_mean)
+```
+### Difference with adverbial negation
+Comparing the means of affirmative with 'ask' to means of clitic with ask
+```{r}
+t.test(adult_aff_ask$value, mu = adult_not_ask_mean)
+```
+
+Comparing the means of affirmative 'promise' to means of clitic with 'promise
+```{r}
+t.test(adult_aff_promise$value, mu = adult_not_promise_mean)
+```
+
