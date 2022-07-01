@@ -46,15 +46,18 @@ The Markdown code for the description you're reading.
 ---
 
 ### Analysis
-There were two Excel sheets in the same workbook that were used to clean and consolidate the data. As a source folder for PowerQuery, we used the zipped folder of CSV files downloaded from Lookit. 
+Once downloaded from Lookit as a zipped folder, the raw CSV data files were imported to two Excel sheets in the same workbook and cleaned using two PowerQuery scripts. For easier qualitative coding, the data were transferred to a separate Excel workbook and relevant participant information (age, language, ID, etc) were added. The coded data were then imported to RStudio for statistical analysis.
+
+#### analysis.Rmd
+This RMarkdown document organizes the scripts used in the statistical analysis. These are organized in three sections: importing, running regressions, and vistualizations/summary statistics.
 
 #### data_cleaning_frameChoices_NEW.pq
 
-This script set up the `frameChoices` sheet compiled the code of all possible responses or buttons that participants could use. 
+This PowerQuery script set up the `frameChoices` sheet compiled the code of all possible responses or buttons that participants could use. 
 
 #### data_cleaning_selectedImages_NEW.pq
 
-This script set up the `selectedImages` sheet to compile all choices made by participants during the study.
+This PowerQuery script set up the `selectedImages` sheet to compile all choices made by participants during the study.
 
 ---
 
